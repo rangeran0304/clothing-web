@@ -1,8 +1,11 @@
+import './shop.styles.scss'
+import { Routes, Route } from 'react-router-dom';
+import { CategoriesPreview } from '../category-preview/category-preview.component';
+import { Category } from '../Category/category.component';
 const Shop = ()=>{
-    return(
-        <div>
-        this is shop page
-        </div>
-    )
+    return(<Routes>
+     <Route index element= {<CategoriesPreview/>}/>
+     <Route path=':category' element={<Category/>}/>
+    </Routes>)
 }
 export default Shop

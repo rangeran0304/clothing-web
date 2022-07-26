@@ -5,9 +5,11 @@ import {
     signInWithPopup,
     GoogleAuthProvider,
     createUserWithEmailAndPassword,
-    signInWithEmailAndPassword
+    signInWithEmailAndPassword,
+    signOut,
+    onAuthStateChanged,
   } from 'firebase/auth';
-import { getFirestore, doc, getDoc, setDoc } from 'firebase/firestore';
+import { getFirestore, doc, getDoc, setDoc ,collection,writeBatch,query,getDocs} from 'firebase/firestore';
 const firebaseConfig = {
     apiKey: "AIzaSyBcDme_b42pMDssLgH4_93G2ig44Z2yZ6I",
     authDomain: "clothing-web-7cb45.firebaseapp.com",
@@ -58,4 +60,32 @@ export const signInAuthUserWithEmailAndPassword = async(email,password)=>{
     return;
   }
   return await signInWithEmailAndPassword(auth,email,password);
+}
+export const signOutAuthUser = async () => await signOut(auth);
+export const onAuthStateChangedListener = (callback) =>{
+  onAuthStateChanged(auth,callback)
+}
+export const addCollectionandDocuments = async (Key, Objects)=>{
+  const batch=writeBatch(db);
+  const collectionRef = collection(db, Key)
+  Objects.forEach((object) => {
+    const docRef = doc(collectionRef,object.title.toLowerCase())
+    batch.set(docRef,object)
+  }
+  )
+  await batch.commit();
+  console.log('done');
+}
+export const getCategoriesAndDocuments = async()=>{
+  const collectionRef = collection(db, 'collections');
+  const q = query(collectionRef);
+
+  const querySnapshot = await getDocs(q);
+  const categoryMap = querySnapshot.docs.reduce((acc, docSnapshot) => {
+    const { title, items } = docSnapshot.data();
+    acc[title.toLowerCase()] = items;
+    return acc;
+  }, {});
+
+  return categoryMap;
 }
