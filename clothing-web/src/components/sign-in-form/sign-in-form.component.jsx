@@ -6,7 +6,7 @@ import {
 from '../../utils/firebase/firebase.utils'
 import Button from '../button/button.component'
 import FormInput from '../form-input/form-input.component'
-import './sign-in-form.styles.scss'
+import { ButtonsContainer,SignInContainer } from './sign-in-form.styles'
 import { UserContext } from '../../contexts/user.context';
 import { useContext } from 'react';
 const defaultFormfields = {
@@ -50,7 +50,7 @@ const SignInForm = () =>{
         setFormfields({...formFields,[name]:value})
     }
     return(
-        <div className='sign-in-container'>
+        <SignInContainer>
           <h1>Sign up with your email and password</h1>
           <form onSubmit={handleSubmit}>
             <FormInput
@@ -67,10 +67,12 @@ const SignInForm = () =>{
               onChange={handleChange}
               name='password'
               value={password}/>
+            <ButtonsContainer>
             <Button type='submit'>Sign In</Button>
-            <Button type='button' buttonType='google' onClick={GoogleLogIn}>Sign In With Google</Button>     
+            <Button type='button' buttonType='google' onClick={GoogleLogIn}> Google</Button>     
+            </ButtonsContainer>
           </form>
-        </div>
+        </SignInContainer>
     )
 }
 export default SignInForm
